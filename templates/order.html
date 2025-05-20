@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заказ #{{ order.id_order }}</title>
+</head>
+<body>
+    <h1>Заказ #{{ order.id_order }}</h1>
+    <p>Название заказа: {{ order.name_orders }}</p>
+    <form action="{{ url_for('copy_order_route') }}" method="POST">
+        <input type="hidden" name="id_order" value="{{ order.id_order }}"> 
+        <button type="submit">Скопировать заказ</button>
+    </form>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</body>
+</html>

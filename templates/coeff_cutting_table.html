@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Технологические операции</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Переключить навигацию">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="row w-100">
+                    <div class="col-12 d-flex justify-content-between mb-2">
+                        <div>
+                            <button onclick="window.location.href='/operation_table'"
+                                class="btn btn-secondary">Справочники</button>
+                            <button onclick="window.location.href='/index'" class="btn active">Журнал заказов</button>
+                        </div>
+                        <div>
+                            {% if current_user.is_authenticated %}
+                            <button onclick="window.location.href='/logout'" class="btn btn-danger">Выход</button>
+                            {% else %}
+                            <button onclick="window.location.href='/login'" class="btn btn-secondary">Вход</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- <div class="col-12 d-flex justify-content-start">
+                        <button onclick="window.location.href='/index'" id="все-button" class="btn active me-2">Все</button>
+                        <button onclick="window.location.href='/template'" id="шаблон-button" class="btn btn-secondary me-2">Шаблон</button>
+                        <button onclick="window.location.href='/calculation'" id="расчет-button" class="btn btn-secondary me-2">Расчет</button>
+                        <button onclick="window.location.href='/verified'" id="проверка-button" class="btn btn-secondary">Проверка</button>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- <button onclick="window.location.href='/new_operation'" class="btn btn-success">Добавить операцию</button> -->
+    <div class="container">
+    <div id="content">
+        <table>
+            <thead>
+                <tr>
+                    <th>Код коэффициента для резки</th>
+                    <th>Название коэффициента</th>
+                    <th>Значение</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for coeff in coeffs %}
+                <tr>
+                    <td>{{ coeff.id_coeff_cutting }}</td>
+                    <td>{{ coeff.name_coeff_cutting }}</td>
+                    <td>{{ coeff.coeff_cutting }}</td>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+    
+    
+
+</body>
+
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Паспорт заказа {{ order.id_order }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Переключить навигацию">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="row w-100">
+                    <div class="col-12 d-flex justify-content-between mb-2">
+                        <div>
+                            <button onclick="window.location.href='/operation_table'"
+                                class="btn btn-secondary">Справочники</button>
+                            <button onclick="window.location.href='/index'" class="btn active">Журнал заказов</button>
+                        </div>
+                        <div>
+                            {% if current_user.is_authenticated %}
+                            <button onclick="window.location.href='/logout'" class="btn btn-danger">Выход</button>
+                            {% else %}
+                            <button onclick="window.location.href='/login'" class="btn btn-secondary">Вход</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="text-left mb-4">
+                        <button class="btn active"
+                            onclick="window.location.href='/passport/{{ order.id_order }}'">Паспорт заказа</button>
+                        <button class="btn btn-secondary"
+                            onclick="window.location.href='/tree/{{ order.id_order }}'">Технологическая схема</button>
+                        <button class="btn btn-secondary"
+                            onclick="window.location.href='/materials/{{ order.id_order }}'">Материалы заказа</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="mt-3">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    <div class="d-flex align-items-center">
+        <p class="mb-0 me-3"><strong>Номер заказа:</strong> {{ order.id_order }}{{ order.status[0] }} </p>
+        <p class="mb-0"><strong>Название изделия:</strong> {{ order.name_orders }}</p>
+    </div>
+
+    <div class="d-flex align-items-center">
+        <p class="mb-0 me-3"><strong>Сумма:</strong> {{ order.amount }}</p>
+        <p class="mb-0 me-3"><strong>Тираж:</strong> {{ order.circulation }}</p>
+        <p class="mb-0"><strong>Статус:</strong> {{ order.status }}</p>
+    </div>
+    <div class="d-flex align-items-start">
+        <form action="/update_order_date_time" method="POST" class="d-flex align-items-end">
+            <input type="hidden" name="id_order" value="{{ order.id_order }}">
+
+            <div class="me-4">
+                <label for="dateCompletion"><strong>Дата заказа:</strong></label>
+                <input class="form-control" type="date" id="dateCompletion" name="order_date"
+                    value="{{ order.order_date.strftime('%Y-%m-%d') if order.order_date else '' }}">
+            </div>
+
+            <div class="me-4">
+                <label for="timeCompletion"><strong>Время заказа:</strong></label>
+                <input class="form-control" type="time" id="timeCompletion" name="order_time"
+                    value="{{ order.order_time.strftime('%H:%M') if order.order_time else '' }}">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Изменить</button>
+
+        </form>
+    </div>
+
+    <div class="d-flex align-items-start">
+        <form action="/update_date_time_completion" method="POST" class="d-flex align-items-end">
+            <input type="hidden" name="id_order" value="{{ order.id_order }}">
+
+            <div class="me-4">
+                <label for="dateCompletion"><strong>Дата готовности заказа:</strong></label>
+                <input class="form-control" type="date" id="dateCompletion" name="date_completion"
+                    value="{{ order.date_completion.strftime('%Y-%m-%d') if order.date_completion else '' }}">
+            </div>
+
+            <div class="me-4">
+                <label for="timeCompletion"><strong>Время готовности заказа:</strong></label>
+                <input class="form-control" type="time" id="timeCompletion" name="time_completion"
+                    value="{{ order.time_completion.strftime('%H:%M') if order.time_completion else '' }}">
+            </div>
+
+            <div class="d-flex align-items-end">
+                <button type="submit" class="btn btn-primary">Изменить</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="d-flex align-items-start">
+        <div class="me-4">
+            <label for="timeCompletion"><strong>Менеджер:</strong> {{ order.id_employee }}</label>
+            <form action="/submit_manager" method="POST" class="d-flex align-items-end">
+                <input class="form-control me-2" style="width: auto;" type="hidden" name="id_order"
+                    value="{{ order.id_order }}">
+                <div class="d-flex align-items-center">
+                    <select style="width: auto;" id="managerSelect" name="id_employee" class="form-select">
+                        {% for employee in employees %}
+                        <option value="{{ employee.id_employee }}" {% if employee.id_employee==order.id_employee %}
+                            selected {% endif %}>
+                            {{ employee.surname }} {{ employee.name_employee }} {{ employee.patronymic }} ({{
+                            employee.position_employee }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-primary mt-2">Изменить</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="me-4">
+            <label for="timeCompletion"><strong>Клиент:</strong> {{ order.id_customers }}</label>
+            <form action="/update_customers" method="POST" class="form-group">
+                <input class="form-control me-2" style="width: auto;" type="hidden" name="id_order"
+                    value="{{ order.id_order }}">
+                <div class="d-flex align-items-center">
+                    <select style="width: auto;" id="customerSelect" name="id_customers" class="form-select">
+                        {% for customer in customers %}
+                        <option value="{{ customer.id_customer }}" {% if customer.id_customer==order.id_customers %}
+                            selected {% endif %}>
+                            {{ customer.name_customer }} {{ customer.contacts }} {{ customer.address }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-primary mt-2">Изменить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="text-left mb-4">
+        <div class="button-group-left">
+            <!-- Кнопка для изменения статуса на "шаблон" -->
+            <form action="/update_status_template" method="POST" class="d-inline">
+                <input type="hidden" name="id_order" value="{{ order.id_order }}">
+                <button type="submit" class="btn btn-secondary">В шаблон</button>
+            </form>
+            
+            <!-- Кнопка для изменения статуса на "расчет" -->
+            <form action="/update_status_calculation" method="POST" class="d-inline">
+                <input type="hidden" name="id_order" value="{{ order.id_order }}">
+                <button type="submit" class="btn btn-secondary">Расчет</button>
+            </form>
+
+            <!-- Кнопка для изменения статуса на "проверен" -->
+            <form action="/update_status_verified" method="POST" class="d-inline">
+                <input type="hidden" name="id_order" value="{{ order.id_order }}">
+                <button type="submit" class="btn btn-secondary">В проверку</button>
+            </form>
+
+            <!-- Кнопка для изменения статуса на "проверен" -->
+            <form action="/delete_orders" method="POST" class="d-inline">
+                <input type="hidden" name="id_order" value="{{ order.id_order }}">
+                <button type="submit" class="btn btn-secondary">Удалить</button>
+            </form>
+            
+        </div>
+    </div>
+
+    <script>
+        function showPrintingSystem() {
+            window.location.href = '/index';
+        }
+    </script>
+
+</body>
+
+</html>

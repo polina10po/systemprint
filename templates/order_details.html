@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Паспорт заказа {{ order.id_order }}</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+        .button-group {
+            display: flex;
+        }
+        button {
+            margin-right: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50; /* Зеленый цвет по умолчанию */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button.active {
+            background-color: #0f3011; /* Темно-зеленый цвет для активной кнопки */
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #content {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <button onclick="showPassport()">Паспорт заказа</button>
+    <button onclick="showDetails()">Дерево заказа</button>
+    <button onclick="showPrintingSystem()">Система печати</button>
+
+    <h1>Детали заказа</h1>
+    <p>ID Заказа: {{ order.id_order }}</p>
+    <p>Название: {{ order.name_orders }}</p>
+    <p>ID Родительской Операции: {{ order.id_parent_operation }}</p>
+    <p>ID Дочерней Операции: {{ order.id_child_operation }}</p>
+    <p>Количество: {{ order.amount }}</p>
+    <p>Тираж: {{ order.circulation }}</p>
+    <p>Статус: {{ order.status }}</p>
+    <button onclick="window.location.href='/'">Назад</button>
+
+    <script>
+        function showPassport() {
+            window.location.href = '/passport'
+        }
+
+        function showDetails() {
+            window.location.href = '/tree';
+        }
+        function showPrintingSystem() {
+            window.location.href = '/index';
+        }
+    </script>
+</body>
+</html>
