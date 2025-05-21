@@ -1,3 +1,4 @@
+import psycopg2
 
 def create_table():
     try:
