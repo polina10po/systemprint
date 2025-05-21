@@ -12,16 +12,6 @@ def create_table():
         cursor.execute(drop_query)  # Выполняем запрос
         print('Таблица orders удалена')
         
-        # # SQL-запрос для удаления таблицы
-        # drop_query = "DROP TABLE IF EXISTS parameters_operations;"  # Удаляем таблицу только если она существует
-        # cursor.execute(drop_query)  # Выполняем запрос
-        # print('Таблица parameters_operations удалена')
-        
-        # # SQL-запрос для удаления таблицы
-        # drop_query = "DROP TABLE IF EXISTS nomenclature_parameters;"  # Удаляем таблицу только если она существует
-        # cursor.execute(drop_query)  # Выполняем запрос
-        # print('Таблица nomenclature_parameters удалена')
-        
         # SQL-запрос для удаления таблицы
         drop_query = "DROP TABLE IF EXISTS operations CASCADE;"  # Удаляем таблицу только если она существует
         cursor.execute(drop_query)  # Выполняем запрос
