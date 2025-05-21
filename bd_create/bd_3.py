@@ -31,3 +31,4 @@ def create_table():
 
 # Вызов функции
 create_table()
+
